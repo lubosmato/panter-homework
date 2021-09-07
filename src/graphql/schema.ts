@@ -1,6 +1,6 @@
 import { makeSchema, queryType } from "nexus";
 import { nexusPrisma } from "nexus-plugin-prisma";
-import prismaClient from "../../prisma/prismaClient";
+
 import * as userTypes from "./types/User";
 import { join } from "path";
 export const schema = makeSchema({
