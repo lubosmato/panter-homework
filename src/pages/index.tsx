@@ -11,7 +11,7 @@ const Home: NextPage = () => {
 
   return (
     <PageLayout>
-      <Heading>Hello</Heading>
+      <Heading>Starter Project</Heading>
       {me ? (
         <div>
           <p>hello {me.email}</p>
