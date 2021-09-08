@@ -1,4 +1,20 @@
-## starter challenge
+# starter challenge
+
+## The challenge
+
+Your challenge is to create a good old todo app. Boring, i know, but still a good exercise:
+
+- A logged in user should be able to create new Todo-lists
+- A list should have some title and of course Todos
+- A todo has some title and whether it's done
+- users can have multiple todolists
+- everything should be persisted in the database
+- use apollo queries and mutations to fetch and update data
+- other users or not logged in users should not see other's todolists
+
+Feel free to spice things up, make it beautiful, fancy, add more functionality, etc.
+
+## Setup
 
 This is a [nextjs](https://nextjs.org/) project with
 
@@ -7,19 +23,20 @@ This is a [nextjs](https://nextjs.org/) project with
 - [nexus](https://nexusjs.org/) to define graphql resolvers and schema
 - [prisma](https://www.prisma.io/) for database (using progress)
 - [nexus-plugin-prisma](https://nexusjs.org/docs/plugins/prisma/overview) to derive graphql types from the prisma schema
+- [styled-components](https://github.com/styled-components/styled-components) for styling
 
-## getting started
+### getting started
 
 run `yarn dev` to run it locally on [localhost:3000](http://localhost:3000)
 
-## Env vars
+### Env vars
 
 You need to define some env vars, see [.env.template](.env.template).
 
 You additionaly need to create oauth credentials to signin with google (https://console.cloud.google.com/apis/dashboard)
 You can also replace
 
-## db schema changes
+### db schema changes
 
 edit [schema.prisma](prisma/schema.prisma) to adjust the schema.
 Make sure to use the Prisma vscode extension for formatting, syntax highlighting
