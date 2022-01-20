@@ -1,9 +1,14 @@
-import styled from "styled-components"
+import {FunctionComponent} from "react"
+import Navigation from "./Navigation"
 
-const PageLayout = styled.div`
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px;
-`
+const PageLayout: FunctionComponent = ({children}) =>
+  <div className="container">
+    <header>
+      <Navigation />
+    </header>
+    <main>
+      { children }
+    </main>
+  </div>
 
 export default PageLayout

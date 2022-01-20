@@ -2,8 +2,9 @@ import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client"
 import {SessionProvider, useSession} from "next-auth/react"
 import type {AppProps} from "next/app"
 import React, {FC, useEffect} from "react"
+
 import "../styles/reset.css"
-import "../styles/main.css"
+import "../styles/main.sass"
 
 const apolloClient = new ApolloClient({
   uri: "/api/graphql",

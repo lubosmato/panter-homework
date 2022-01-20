@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
 
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prismaClient from "../../../../prisma/prismaClient";
+import {PrismaAdapter} from "@next-auth/prisma-adapter"
+import prismaClient from "../../../../prisma/prismaClient"
 
 export default NextAuth({
   adapter: PrismaAdapter(prismaClient),
@@ -15,10 +15,10 @@ export default NextAuth({
     // ...add more providers here
   ],
   callbacks: {
-    async session({ session, token, user }) {
+    async session({session, token, user}) {
       // we additionally add user id as this is normally not included
-      session.user.id = user.id;
-      return session;
+      session.user.id = user.id
+      return session
     },
   },
-});
+})

@@ -1,27 +1,25 @@
 import type {NextPage} from "next"
-import {signIn, signOut} from "next-auth/react"
 import React from "react"
-import Heading from "../ui/layout/components/Heading"
 import PageLayout from "../ui/layout/components/PageLayout"
-import MyUserAvatar from "../ui/user/components/MyUserAvatar"
+import Dashboard from "../ui/user/components/Dashboard"
+import LoginForm from "../ui/user/components/LoginForm"
 import {useMe} from "../ui/user/hooks/useMe"
 
 const Home: NextPage = () => {
-  const me = useMe().data?.me
+  const {data, loading} = useMe()
+  const me = data?.me
 
   return (
     <PageLayout>
-      <Heading>Starter Project</Heading>
-      {me ? (
-        <div>
-          <p>hello {me.email}</p>
-          <MyUserAvatar />
-          <button onClick={() => signOut({redirect: false})}>Signout </button>
-        </div>
+      {loading ? (
+        <div>Loading...</div> // TODO maybe add a placeholder? or figure out what is the proper way of doing this
+      ) : me ? (
+        <Dashboard />
       ) : (
-        <button onClick={() => signIn("google")}>Sign in with Google</button>
+        <LoginForm />
       )}
     </PageLayout>
+
   )
 }
 
