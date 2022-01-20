@@ -1,16 +1,16 @@
-import { extendType, objectType, queryType } from "nexus";
+import { objectType, queryType } from "nexus";
+import { TodoList } from "./TodoList";
 
 export const User = objectType({
   name: "User",
   definition(t) {
-    t.model.id();
-    t.model.email();
-    t.model.image();
+    t.model.id()
+    t.model.email()
+    t.model.image()
   },
 });
 
-export const Query = extendType({
-  type: "Query",
+export const GetMe = queryType({
   definition(t) {
     t.field("me", {
       type: User,
@@ -20,7 +20,10 @@ export const Query = extendType({
         }
         return context.prisma.user.findFirst({
           where: { id: context.session.user.id },
-        });
+          include: {
+            todoLists: false
+          }
+        }); 
       },
     });
   },

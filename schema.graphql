@@ -2,8 +2,33 @@
 ### Do not make changes to this file directly
 
 
+type Mutation {
+  changeTodoItem(id: String!, isChecked: Boolean!, title: String!): TodoItem
+  createTodoItem(todoListId: String!): TodoItem
+  createTodoList(title: String!): TodoList
+  deleteTodoItem(id: String!): TodoItem
+  deleteTodoList(id: String!): TodoList
+}
+
 type Query {
   me: User
+  myTodoLists: [TodoList]
+}
+
+type TodoItem {
+  id: String!
+  isChecked: Boolean!
+  title: String!
+}
+
+input TodoItemWhereUniqueInput {
+  id: String
+}
+
+type TodoList {
+  id: String!
+  title: String!
+  todoItems(after: TodoItemWhereUniqueInput, before: TodoItemWhereUniqueInput, first: Int, last: Int): [TodoItem!]!
 }
 
 type User {
