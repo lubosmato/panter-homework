@@ -10,7 +10,6 @@
 export interface DeleteTodoList_deleteTodoList {
   __typename: "TodoList";
   id: string;
-  title: string;
 }
 
 export interface DeleteTodoList {

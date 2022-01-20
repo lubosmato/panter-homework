@@ -1,10 +1,10 @@
-import { makeSchema, queryType } from "nexus";
-import { nexusPrisma } from "nexus-plugin-prisma";
+import {makeSchema, queryType} from "nexus"
+import {nexusPrisma} from "nexus-plugin-prisma"
 
-import * as userTypes from "./types/User";
-import * as todoListTypes from "./types/TodoList";
-import * as todoItemTypes from "./types/TodoItem";
-import { join } from "path";
+import * as userTypes from "./types/User"
+import * as todoListTypes from "./types/TodoList"
+import * as todoItemTypes from "./types/TodoItem"
+import {join} from "path"
 export const schema = makeSchema({
   types: [userTypes, todoItemTypes, todoListTypes],
   plugins: [nexusPrisma()],
@@ -20,4 +20,4 @@ export const schema = makeSchema({
       "node_modules/@types/nexus-typegen-custom/index.d.ts"
     ),
   },
-});
+})

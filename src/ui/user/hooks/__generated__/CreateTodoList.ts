@@ -10,7 +10,6 @@
 export interface CreateTodoList_createTodoList {
   __typename: "TodoList";
   id: string;
-  title: string;
 }
 
 export interface CreateTodoList {

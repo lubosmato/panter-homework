@@ -1,7 +1,7 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { MyTodoLists } from "./__generated__/MyTodoLists";
-import { DeleteTodoList } from "./__generated__/DeleteTodoList";
-import { CreateTodoList } from "./__generated__/CreateTodoList";
+import {gql, useMutation, useQuery} from "@apollo/client"
+import {MyTodoLists} from "./__generated__/MyTodoLists"
+import {DeleteTodoList} from "./__generated__/DeleteTodoList"
+import {CreateTodoList} from "./__generated__/CreateTodoList"
 
 const DELETE_TODO_LIST = gql`
 mutation DeleteTodoList($id: String!) {
@@ -9,7 +9,7 @@ mutation DeleteTodoList($id: String!) {
     id
   }
 }
-`;
+`
 
 const CREATE_TODO_LIST = gql`
 mutation CreateTodoList($title: String!) {
@@ -17,7 +17,7 @@ mutation CreateTodoList($title: String!) {
     id
   }
 }
-`;
+`
 const MY_TODO_LISTS = gql`
   query MyTodoLists {
     myTodoLists {
@@ -30,16 +30,16 @@ const MY_TODO_LISTS = gql`
       }
     }
   }
-`;
+`
 
 export const useMyTodoLists = () => {
-  return useQuery<MyTodoLists>(MY_TODO_LISTS);
-};
+  return useQuery<MyTodoLists>(MY_TODO_LISTS)
+}
 
 export const useDeleteTodoList = () => {
-  return useMutation<DeleteTodoList>(DELETE_TODO_LIST);
-};
+  return useMutation<DeleteTodoList>(DELETE_TODO_LIST)
+}
 
 export const useCreateTodoList = () => {
-  return useMutation<CreateTodoList>(DELETE_TODO_LIST);
-};
+  return useMutation<CreateTodoList>(DELETE_TODO_LIST)
+}

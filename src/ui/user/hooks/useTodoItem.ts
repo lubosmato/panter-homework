@@ -1,3 +1,3 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import {gql, useMutation, useQuery} from "@apollo/client"
 
 // TODO
