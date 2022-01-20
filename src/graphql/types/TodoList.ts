@@ -14,7 +14,7 @@ export const GetMyTodoLists = extendType({
   definition(t) {
     t.list.field("myTodoLists", {
       type: TodoList,
-      resolve(root, args, context) {
+      async resolve(root, args, context) {
         if (!context.session?.user.id) {
           return null
         }

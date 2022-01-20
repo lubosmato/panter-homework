@@ -24,7 +24,6 @@ const LoginForm: FC = () => {
         <h5 className="card-title">Sign in</h5>
       </div>
       <div className="card-body pt-0">
-
         <LoginButton style={{background: "#4c8bf5"}} className="btn btn-primary" onClick={() => signIn("google")}>Sign in with Google</LoginButton>
         <LoginButton style={{background: "#333"}} className="btn btn-secondary" onClick={() => signIn("github")}>Sign in with GitHub</LoginButton>
       </div>
