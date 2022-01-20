@@ -3,11 +3,11 @@
 
 
 type Mutation {
-  changeTodoItem(id: String!, isChecked: Boolean!, title: String!): TodoItem
   createTodoItem(todoListId: String!): TodoItem
   createTodoList(title: String!): TodoList
   deleteTodoItem(id: String!): TodoItem
   deleteTodoList(id: String!): TodoList
+  updateTodoItem(id: String!, isChecked: Boolean!, title: String!): TodoItem
 }
 
 type Query {

@@ -1,4 +1,4 @@
-import { nonNull, objectType, mutationField, stringArg, nullable, booleanArg } from "nexus";
+import {nonNull, objectType, mutationField, stringArg, nullable, booleanArg} from "nexus"
 
 export const TodoItem = objectType({
   name: "TodoItem",
@@ -7,20 +7,20 @@ export const TodoItem = objectType({
     t.model.title()
     t.model.isChecked()
   },
-});
+})
 
-export const ChangeTodoItem = mutationField("changeTodoItem", {
+export const UpdateTodoItem = mutationField("updateTodoItem", {
   type: TodoItem,
   args: {
     id: nonNull(stringArg()),
     isChecked: nonNull(booleanArg()),
     title: nonNull(stringArg()),
   },
-  async resolve(root, args, { prisma, session }) {
+  async resolve(root, args, {prisma, session}) {
     const userId = session?.user.id
     if (!userId) return null
 
-    const todoItem = await prisma.todoItem.findUnique({ where: { id: args.id } })
+    const todoItem = await prisma.todoItem.findUnique({where: {id: args.id}})
     if (!todoItem) return null
 
     const updatedTodoItem = {...todoItem, ...args}
@@ -31,37 +31,37 @@ export const ChangeTodoItem = mutationField("changeTodoItem", {
       },
       data: updatedTodoItem,
     })
-  }
-});
+  },
+})
 
 export const CreateTodoItem = mutationField("createTodoItem", {
   type: TodoItem,
   args: {
     todoListId: nonNull(stringArg()),
   },
-  resolve(root, args, { prisma, session }) {
+  resolve(root, args, {prisma, session}) {
     const userId = session?.user.id
     if (!userId) return null
 
-    return prisma.todoItem.create({ 
+    return prisma.todoItem.create({
       data: {
         todoListId: args.todoListId,
         title: "",
         isChecked: false,
-      }
+      },
     })
-  }
-});
+  },
+})
 
 export const DeleteTodoItem = mutationField("deleteTodoItem", {
   type: TodoItem,
   args: {
     id: nonNull(stringArg()),
   },
-  resolve(root, args, { prisma, session }) {
+  resolve(root, args, {prisma, session}) {
     const userId = session?.user.id
     if (!userId) return null
 
-    return prisma.todoItem.delete({ where: { id: args.id } })
-  }
-});
+    return prisma.todoItem.delete({where: {id: args.id}})
+  },
+})

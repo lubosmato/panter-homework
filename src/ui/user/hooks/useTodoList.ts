@@ -41,5 +41,5 @@ export const useDeleteTodoList = () => {
 }
 
 export const useCreateTodoList = () => {
-  return useMutation<CreateTodoList>(DELETE_TODO_LIST)
+  return useMutation<CreateTodoList>(CREATE_TODO_LIST)
 }
