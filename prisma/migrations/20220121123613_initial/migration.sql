@@ -61,6 +61,7 @@ CREATE TABLE "TodoItem" (
     "title" TEXT NOT NULL,
     "isChecked" BOOLEAN NOT NULL,
     "todoListId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "TodoItem_pkey" PRIMARY KEY ("id")
 );

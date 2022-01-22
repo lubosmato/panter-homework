@@ -12,6 +12,7 @@ export interface MyTodoLists_myTodoLists_todoItems {
   id: string;
   title: string;
   isChecked: boolean;
+  createdAt: any;
 }
 
 export interface MyTodoLists_myTodoLists {

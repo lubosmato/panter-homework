@@ -6,6 +6,7 @@ export const TodoItem = objectType({
     t.model.id()
     t.model.title()
     t.model.isChecked()
+    t.model.createdAt()
   },
 })
 

@@ -18,10 +18,16 @@ export const GetMyTodoLists = extendType({
         if (!context.session?.user.id) {
           return null
         }
+
         return context.prisma.todoList.findMany({
           where: {userId: context.session.user.id},
           include: {
-            todoItems: true,
+            todoItems: {
+              // TODO it works on prisma layer but when it is returned from resolver, it fucks up ordering
+              orderBy: {
+                createdAt: "asc",
+              },
+            },
           },
         })
       },

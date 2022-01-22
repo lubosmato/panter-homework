@@ -73,4 +73,5 @@ model TodoItem {
   isChecked  Boolean
   todoListId String
   todoList   TodoList @relation(fields: [todoListId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
 }

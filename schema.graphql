@@ -2,6 +2,8 @@
 ### Do not make changes to this file directly
 
 
+scalar DateTime
+
 type Mutation {
   createTodoItem(todoListId: String!): TodoItem
   createTodoList(title: String!): TodoList
@@ -16,6 +18,7 @@ type Query {
 }
 
 type TodoItem {
+  createdAt: DateTime!
   id: String!
   isChecked: Boolean!
   title: String!
