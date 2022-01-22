@@ -1,22 +1,28 @@
 import styled from "styled-components"
 import {FC, KeyboardEvent, useEffect, useRef, useState} from "react"
 
-import {useDeleteTodoList, useMyTodoLists} from "../hooks/useTodoList"
 import {MyTodoLists_myTodoLists, MyTodoLists_myTodoLists_todoItems} from "../hooks/__generated__/MyTodoLists"
-import {useCreateTodoItem, useDeleteTodoItem, useUpdateTodoItem} from "../hooks/useTodoItem"
+
+import {useMyTodoLists, useTodoList, useUpdateTodoList} from "../hooks/useTodoList"
+import {useTodoItem, useUpdateTodoItem} from "../hooks/useTodoItem"
 
 const Dashboard: FC = () => {
   const {loading, data} = useMyTodoLists()
   const myTodoLists = data?.myTodoLists
 
+  const {createTodoList} = useTodoList()
+
   if (loading) return <div>Transfering letters...</div>
 
-  return <div className="row">
-    {
-      myTodoLists?.map((todoList) => {
-        return todoList && <TodoListCard key={`list-${todoList.id}`} todoList={todoList} />
-      })
-    }
+  return <div>
+    <button className="btn btn-primary mb-3" onClick={createTodoList}>Add a new list</button>
+    <div className="row">
+      {
+        myTodoLists?.map((todoList) => {
+          return todoList && <TodoListCard key={`list-${todoList.id}`} todoList={todoList} />
+        })
+      }
+    </div>
   </div>
 }
 
@@ -24,10 +30,10 @@ const TodoListCard: FC<{
   todoList: MyTodoLists_myTodoLists
 }> = ({todoList}) => {
 
-  const [createTodoItem] = useCreateTodoItem()
+  const {createTodoItem} = useTodoItem()
 
-  // TODO apollo cache probably fucks up ordering (how to deal with this?)
-  // TODO apollo server (and its codegen) does not have binding for datetime ¯\_(ツ)_/¯ (as a dev I unfortunately know why and admire them for this decision)
+  // TODO apollo magic (maybe cache?) probably fucks up ordering of relations (how to deal with this?)
+  // TODO apollo's codegen does not have binding for datetime ¯\_(ツ)_/¯
   const sortedTodoItems = [...todoList.todoItems]
     .sort(
       (a, b) => (new Date(a.createdAt as string)).getTime() - (new Date(b.createdAt as string)).getTime()
@@ -43,6 +49,8 @@ const TodoListCard: FC<{
     }
   }
 
+  const disableDelete = sortedTodoItems.length === 1
+
   return <div key={`list-${todoList.id}`} className="col-lg-4 col-md-6 col-sm-12 col-xs-12">
     <div className="card mb-3">
       <div className="card-body">
@@ -50,6 +58,7 @@ const TodoListCard: FC<{
         {
           sortedTodoItems.map((item, index) =>
             <TodoItem
+              disableDelete={disableDelete}
               item={item}
               key={`item-${item.id}`}
               isSelected={index === selectedItemIndex}
@@ -66,13 +75,14 @@ const TodoListTitle: FC<{
   todoList: MyTodoLists_myTodoLists
 }> = ({todoList}) => {
 
-  const [deleteList] = useDeleteTodoList(todoList)
+  const {deleteTodoList} = useTodoList()
+  const [state, updateTodoList] = useUpdateTodoList(todoList)
 
   return <TodoListTitleH4 className="card-title">
-    {todoList.title}
+    <TodoListTitleInput value={state.title} onChange={(e) => updateTodoList({...todoList, title: e.target.value})} />
     <CloseButton
       tabIndex={-1}
-      onClick={deleteList}
+      onClick={() => deleteTodoList(todoList)}
       className="btn btn-sm">X</CloseButton>
   </TodoListTitleH4>
 }
@@ -80,11 +90,12 @@ const TodoListTitle: FC<{
 const TodoItem: FC<{
   item: MyTodoLists_myTodoLists_todoItems
   isSelected: boolean
+  disableDelete: boolean
   requestSelectedChange: (indexOffset: number) => void
-}> = (({item, isSelected, requestSelectedChange}) => {
+}> = (({item, isSelected, disableDelete, requestSelectedChange}) => {
 
   const [state, updateTodoItem] = useUpdateTodoItem(item)
-  const [deleteTodoItem] = useDeleteTodoItem(item)
+  const {deleteTodoItem} = useTodoItem()
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -117,8 +128,9 @@ const TodoItem: FC<{
       value={state.title}
     />
     <CloseButton
+      disabled={disableDelete}
       tabIndex={-1}
-      onClick={deleteTodoItem}
+      onClick={() => !disableDelete && deleteTodoItem(item)}
       className="btn btn-sm">X</CloseButton>
   </TodoItemRow>
 })
@@ -128,10 +140,13 @@ const CloseButton = styled.button`
   transition: opacity 0.5s;
   color: #ffa6a6;
   font-weight: 600;
+  &:disabled {
+    opacity: 0;
+  }
 `
 
 const TodoItemRow = styled.div`
-  &:hover ${CloseButton} {
+  &:hover ${CloseButton}:not([disabled]) {
     opacity: 1;
   }
   margin: 5px 0;
@@ -149,6 +164,11 @@ const TodoItemInput = styled.input`
   padding: 5px;
   width: 100%;
   border: 0;
+`
+
+const TodoListTitleInput = styled(TodoItemInput)`
+  font-family: "Cabin Sketch", cursive;
+  font-weight: 400;
 `
 
 const TodoItemCheck = styled.input`

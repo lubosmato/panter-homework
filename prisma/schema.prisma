@@ -64,7 +64,7 @@ model TodoList {
   userId    String
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   todoItems TodoItem[]
-  // NOTE feature idea: type (TEXT | LIST)
+  createdAt DateTime   @default(now())
 }
 
 model TodoItem {

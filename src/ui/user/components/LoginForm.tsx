@@ -14,6 +14,7 @@ const FormCard = styled.div`
 
 const LoginButton = styled.button`
   width: 100%;
+  min-width: 200px;
   margin-bottom: 1rem;
 `
 
@@ -25,7 +26,9 @@ const LoginForm: FC = () => {
       </div>
       <div className="card-body pt-0">
         <LoginButton style={{background: "#4c8bf5"}} className="btn btn-primary" onClick={() => signIn("google")}>Sign in with Google</LoginButton>
-        <LoginButton style={{background: "#333"}} className="btn btn-secondary" onClick={() => signIn("github")}>Sign in with GitHub</LoginButton>
+        {
+          // <LoginButton style={{background: "#333"}} className="btn btn-secondary" onClick={() => signIn("github")}>Sign in with GitHub</LoginButton>
+        }
       </div>
     </FormCard>
   </Form>

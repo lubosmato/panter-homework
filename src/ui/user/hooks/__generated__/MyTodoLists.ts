@@ -19,6 +19,7 @@ export interface MyTodoLists_myTodoLists {
   __typename: "TodoList";
   id: string;
   title: string;
+  createdAt: any;
   todoItems: MyTodoLists_myTodoLists_todoItems[];
 }
 

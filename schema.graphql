@@ -10,6 +10,7 @@ type Mutation {
   deleteTodoItem(id: String!): TodoItem
   deleteTodoList(id: String!): TodoList
   updateTodoItem(id: String!, isChecked: Boolean!, title: String!): TodoItem
+  updateTodoList(id: String!, title: String!): TodoList
 }
 
 type Query {
@@ -29,6 +30,7 @@ input TodoItemWhereUniqueInput {
 }
 
 type TodoList {
+  createdAt: DateTime!
   id: String!
   title: String!
   todoItems(after: TodoItemWhereUniqueInput, before: TodoItemWhereUniqueInput, first: Int, last: Int): [TodoItem!]!

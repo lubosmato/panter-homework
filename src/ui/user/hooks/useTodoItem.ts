@@ -33,55 +33,13 @@ mutation UpdateTodoItem($id: String!, $isChecked: Boolean!, $title: String!) {
 }
 `
 
-export const useCreateTodoItem = () => {
-  const [createTodoItem, mutationResult] = useMutation<CreateTodoItem, {todoListId: string}>(CREATE_TODO_ITEM)
-
-  const wrappedMut: [
-    (todoListId: string) => ReturnType<typeof createTodoItem>,
-    typeof mutationResult
-  ] = [
-    (todoListId: string) => createTodoItem({
-      variables: {todoListId},
-      refetchQueries: [
-        MY_TODO_LISTS,
-      ],
-    }),
-    mutationResult,
-  ]
-
-  return wrappedMut
-}
-
-// TODO is this correct use of hooks?
-export const useDeleteTodoItem = (item: MyTodoLists_myTodoLists_todoItems) => {
-  const [deleteTodoItem, mutationResult] = useMutation<DeleteTodoItem, {id: string}>(DELETE_TODO_ITEM)
-
-  // TODO is there simpler way to work with tuples?
-  // TODO or should I just use objects instead?s
-  const wrappedMut: [
-    () => ReturnType<typeof deleteTodoItem>,
-    typeof mutationResult
-  ] = [
-    () => deleteTodoItem({
-      variables: item,
-      refetchQueries: [
-        MY_TODO_LISTS,
-      ],
-    }),
-    mutationResult,
-  ]
-
-  return wrappedMut
-}
-
 export const useUpdateTodoItem = (initialState: MyTodoLists_myTodoLists_todoItems) => {
-  const [updateTodoItem, mutationResult] = useMutation<UpdateTodoItem, UpdateTodoItem_updateTodoItem>(UPDATE_TODO_ITEM)
+  const [updateTodoItem] = useMutation<UpdateTodoItem, UpdateTodoItem_updateTodoItem>(UPDATE_TODO_ITEM)
 
   const [state, setState] = useState(initialState)
 
   const debouncedUpdateTodoItem = useRef(
     debounce(async (item: MyTodoLists_myTodoLists_todoItems) => {
-      console.log("updating item", item.title)
       await updateTodoItem({variables: item})
     }, 500)
   ).current
@@ -96,11 +54,26 @@ export const useUpdateTodoItem = (initialState: MyTodoLists_myTodoLists_todoItem
     return () => debouncedUpdateTodoItem.cancel()
   }, [debouncedUpdateTodoItem])
 
-  const wrapapedMut: [
+  const wrapped: [
     typeof state,
-    typeof setStateAndUpdateTodoItem,
-    typeof mutationResult
-  ] = [state, setStateAndUpdateTodoItem, mutationResult]
+    typeof setStateAndUpdateTodoItem
+  ] = [state, setStateAndUpdateTodoItem]
 
-  return wrapapedMut
+  return wrapped
+}
+
+export const useTodoItem = () => {
+  const [createItem] = useMutation<CreateTodoItem, {todoListId: string}>(CREATE_TODO_ITEM)
+  const [deleteItem] = useMutation<DeleteTodoItem, {id: string}>(DELETE_TODO_ITEM)
+
+  return {
+    createTodoItem: (todoListId: string) => createItem({
+      variables: {todoListId},
+      refetchQueries: [MY_TODO_LISTS],
+    }),
+    deleteTodoItem: (item: MyTodoLists_myTodoLists_todoItems) => deleteItem({
+      variables: item,
+      refetchQueries: [MY_TODO_LISTS],
+    }),
+  }
 }

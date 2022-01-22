@@ -5,6 +5,7 @@ export const TodoList = objectType({
   definition(t) {
     t.model.id()
     t.model.title()
+    t.model.createdAt()
     t.model.todoItems()
   },
 })
@@ -29,8 +30,35 @@ export const GetMyTodoLists = extendType({
               },
             },
           },
+          orderBy: {
+            createdAt: "desc",
+          },
         })
       },
+    })
+  },
+})
+
+export const UpdateTodoList = mutationField("updateTodoList", {
+  type: TodoList,
+  args: {
+    id: nonNull(stringArg()),
+    title: nonNull(stringArg()),
+  },
+  async resolve(root, args, {prisma, session}) {
+    const userId = session?.user.id
+    if (!userId) return null
+
+    const todoList = await prisma.todoList.findUnique({where: {id: args.id}})
+    if (!todoList) return null
+
+    const updatedTodoList = {...todoList, ...args}
+
+    return prisma.todoList.update({
+      where: {
+        id: args.id,
+      },
+      data: updatedTodoList,
     })
   },
 })
@@ -48,6 +76,12 @@ export const CreateTodoList = mutationField("createTodoList", {
       data: {
         title: args.title,
         userId,
+        todoItems: {
+          create: {
+            isChecked: false,
+            title: "",
+          },
+        },
       },
     })
   },
