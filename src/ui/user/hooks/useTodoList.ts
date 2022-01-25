@@ -84,14 +84,62 @@ export const useTodoList = () => {
   const [createList] = useMutation<CreateTodoList, {title: string}>(CREATE_TODO_LIST)
   const [deleteList] = useMutation<DeleteTodoList, {id: string}>(DELETE_TODO_LIST)
 
+  const newListTitle = "New list"
+
   return {
     createTodoList: () => createList({
-      variables: {title: "New list"},
+      variables: {title: newListTitle},
       refetchQueries: [MY_TODO_LISTS],
+      // optimisticResponse: {
+      //   createTodoList: {
+      //     id: "random",
+      //     __typename: "TodoList",
+      //   },
+      // },
+      update: (cache) => {
+        // TODO there is probably no way to do optimistic UI stuff with addition of graphql item
+        // const myTodoLists = cache.readQuery<MyTodoLists>({query: MY_TODO_LISTS})
+        // if(!myTodoLists?.myTodoLists) return
+
+        // const now = (new Date()).getTime()
+
+        // const newTodoLists: MyTodoLists = {
+        //   myTodoLists: [
+        //     ...myTodoLists.myTodoLists,
+        //     {
+        //       __typename: "TodoList",
+        //       id: "random",
+        //       createdAt: now,
+        //       title: newListTitle,
+        //       todoItems: [
+        //         {id: "whut?", createdAt: now, title: "", isChecked: false, __typename: "TodoItem"},
+        //       ],
+        //     },
+        //   ],
+        // }
+
+        // cache.writeQuery<MyTodoLists>({
+        //   query: MY_TODO_LISTS,
+        //   data: newTodoLists,
+        // })
+      },
     }),
     deleteTodoList: (list: MyTodoLists_myTodoLists) => deleteList({
       variables: list,
       refetchQueries: [MY_TODO_LISTS],
+      optimisticResponse: {
+        deleteTodoList: {
+          id: list.id,
+          __typename: "TodoList",
+        },
+      },
+      update: (cache, {data}) => {
+        if (data?.deleteTodoList) {
+          const cahceId = cache.identify({...data.deleteTodoList})
+          cache.evict({id: cahceId})
+          cache.gc()
+        }
+      },
     }),
   }
 }

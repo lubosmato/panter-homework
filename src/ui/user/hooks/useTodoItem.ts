@@ -74,6 +74,19 @@ export const useTodoItem = () => {
     deleteTodoItem: (item: MyTodoLists_myTodoLists_todoItems) => deleteItem({
       variables: item,
       refetchQueries: [MY_TODO_LISTS],
+      optimisticResponse: {
+        deleteTodoItem: {
+          id: item.id,
+          __typename: "TodoItem",
+        },
+      },
+      update: (cache, {data}) => {
+        if (data?.deleteTodoItem) {
+          const cahceId = cache.identify({...data.deleteTodoItem})
+          cache.evict({id: cahceId})
+          cache.gc()
+        }
+      },
     }),
   }
 }
